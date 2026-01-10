@@ -1,0 +1,10 @@
+.about {
+  background-color: aliceblue;
+  display: flex;
+  flex-direction: row;
+}
+
+.abc {
+  height: 100px;
+  width: 100px;
+}
