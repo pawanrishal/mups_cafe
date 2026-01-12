@@ -10,25 +10,25 @@
 <body>
   <nav>
     <div class="nav-container">
-      <a href="#" class="logo">
+      <a href="../customers/customer_dashboard.php" class="logo">
         <div class="logo-icon">☕</div>
         <span class="logo-text">Mups Cafe</span>
       </a>
 
       <ul class="nav-links" id="navLinks">
         <li><a href="../customers/customer_dashboard.php" class="nav-link active" id="home">Home</a></li>
-        <li><a href="../customers/menu.php" class="nav-link" id="menu">Menu</a></li>
-        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="menu.php" class="nav-link" id="menu">Menu</a></li>
+        <li><a href="#about" class="nav-link">About Us</a></li>
         <li><a href="../customers/cart.php" class="nav-link" id="cart">Cart</a></li>
         <li><a href="#contact" class="nav-link">Contact</a></li>
         <div class="mobile-actions">
-          <a href="#order" class="btn-primary">Order Now</a>
+          <a href="../customers/menu.php" class="btn-primary">Order Now</a>
          <button class="btn-logout">Logout</button></a>
         </div>
       </ul>
 
       <div class="nav-cta">
-        <a href="#order" class="btn-primary">Order Now</a>
+        <a href="../customers/menu.php" class="btn-primary" onclick="sessionStorage.setItem('activeLink','menu')">Order Now</a>
         <a href="../auth/logout.php" onclick="return confirm('ARE YOU SURE?');"><button class="btn-logout">Logout</button></a>
       </div>
 
@@ -39,12 +39,6 @@
       </div>
     </div>
   </nav>
-
-  <!-- <div class="demo-content">
-    <h1>Welcome to Mups Cafe</h1>
-    <p>Experience the perfect blend of comfort and quality. Our carefully crafted beverages and delicious treats await you in a cozy, welcoming atmosphere.</p>
-  </div> -->
-
 
   <script>
     const menuToggle = document.getElementById('menuToggle');

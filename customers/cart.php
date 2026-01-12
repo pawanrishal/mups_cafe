@@ -4,7 +4,7 @@ require_once '../config/dbconfig.php';
 
 // Check if user is logged in and is a customer
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'customer') {
-    header("Location: ../auth/login.php");
+    header("Location: login.php");
     exit();
 }
 

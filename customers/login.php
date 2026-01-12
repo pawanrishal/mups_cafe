@@ -11,7 +11,7 @@ if(isset($_GET['success'])){
     $success = htmlspecialchars($_GET['success']);
 }
 
-if(isset($_SESSION["customer_id"]) && !isset($_GET['force'])){
+if(isset($_SESSION["user_id"]) && !isset($_GET['force'])){
     header("Location: customer_dashboard.php");
     exit();
 }
@@ -39,8 +39,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 $user = $result->fetch_assoc();
                 
                 if (password_verify($password, $user['password'])) {
-                    $_SESSION["customer_id"] = $user['users_id'];
-                    $_SESSION["customer_name"] = $user['username'];
+                    $_SESSION["user_id"] = $user['users_id'];
+                    $_SESSION["username"] = $user['username'];
                     $_SESSION["role"] = $user['role'];
 
                     if (isset($_POST['remember'])) {
@@ -66,8 +66,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         }
 
                         // Log the user in after upgrading the hash
-                        $_SESSION["customer_id"] = $user['users_id'];
-                        $_SESSION["customer_name"] = $user['username'];
+                        $_SESSION["user_id"] = $user['users_id'];
+                        $_SESSION["username"] = $user['username'];
                         $_SESSION["role"] = $user['role'];
 
                         if (isset($_POST['remember'])) {
@@ -116,7 +116,7 @@ if(isset($_COOKIE['username'])){
     <div class="container">
         <form method="POST">
             <fieldset>
-                <legend>Customer Login</legend>
+                <legend>Login</legend>
                 
                 <?php if(!empty($success)): ?>
                     <div class="success-message show">

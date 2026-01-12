@@ -3,13 +3,13 @@ session_start();
 require_once '../config/dbconfig.php';
 
 // Check if user is logged in
-if(!isset($_SESSION['customer_id'])) {
-    header("Location: login.php");
-    exit();
-}
+// if(!isset($_SESSION['user_id'])) {
+//     header("Location: login.php");
+//     exit();
+// }
 
-$user_id = $_SESSION['customer_id'];
-$fullname = $_SESSION['customer_name'] ?? 'Customer';
+// $user_id = $_SESSION['user_id'];
+$fullname = $_SESSION['username'] ?? 'Customer';
 
 // Get user's order statistics (use correct column names from schema)
 $stats_query = "SELECT 

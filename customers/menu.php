@@ -4,7 +4,7 @@ require_once '../config/dbconfig.php';
 
 // Check if user is logged in and is a customer
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'customer') {
-    header("Location: ../auth/login.php");
+    header("Location: login.php");
     exit();
 }
 
@@ -52,32 +52,50 @@ if(isset($_POST['add_to_cart'])) {
     $food_item_id = (int)$_POST['food_item_id'];
     $quantity = (int)$_POST['quantity'];
     
-    // Check if item already in cart
-    $check_query = "SELECT id, quantity FROM cart WHERE customer_id = ? AND food_item_id = ?";
-    if($check_stmt = $conn->prepare($check_query)) {
-        $check_stmt->bind_param("ii", $user_id, $food_item_id);
-        $check_stmt->execute();
-        $result = $check_stmt->get_result();
-        
-        if($result->num_rows > 0) {
-            // Update quantity
-            $row = $result->fetch_assoc();
-            $new_quantity = $row['quantity'] + $quantity;
-            $update_query = "UPDATE cart SET quantity = ? WHERE id = ?";
-            if($update_stmt = $conn->prepare($update_query)) {
-                $update_stmt->bind_param("ii", $new_quantity, $row['id']);
-                $update_stmt->execute();
-                $_SESSION['success'] = "Cart updated successfully!";
+    if($quantity > 0 && $quantity <= 10) {
+        // Check if item already in cart
+        $check_query = "SELECT id, quantity FROM cart WHERE customer_id = ? AND food_item_id = ?";
+        if($check_stmt = $conn->prepare($check_query)) {
+            $check_stmt->bind_param("ii", $user_id, $food_item_id);
+            $check_stmt->execute();
+            $result = $check_stmt->get_result();
+            
+            if($result->num_rows > 0) {
+                // Update quantity
+                $row = $result->fetch_assoc();
+                $new_quantity = $row['quantity'] + $quantity;
+                if($new_quantity <= 10) {
+                    $update_query = "UPDATE cart SET quantity = ? WHERE id = ?";
+                    if($update_stmt = $conn->prepare($update_query)) {
+                        $update_stmt->bind_param("ii", $new_quantity, $row['id']);
+                        if($update_stmt->execute()) {
+                            $_SESSION['success'] = "Cart updated successfully!";
+                        } else {
+                            $_SESSION['error'] = "Failed to update cart: " . $conn->error;
+                        }
+                    }
+                } else {
+                    $_SESSION['error'] = "Maximum quantity is 10 items per product!";
+                }
+            } else {
+                // Insert new item
+                $insert_query = "INSERT INTO cart (customer_id, food_item_id, quantity) VALUES (?, ?, ?)";
+                if($insert_stmt = $conn->prepare($insert_query)) {
+                    $insert_stmt->bind_param("iii", $user_id, $food_item_id, $quantity);
+                    if($insert_stmt->execute()) {
+                        $_SESSION['success'] = "Item added to cart!";
+                    } else {
+                        $_SESSION['error'] = "Failed to add to cart: " . $conn->error;
+                    }
+                } else {
+                    $_SESSION['error'] = "Database error: " . $conn->error;
+                }
             }
         } else {
-            // Insert new item
-            $insert_query = "INSERT INTO cart (customer_id, food_item_id, quantity) VALUES (?, ?, ?)";
-            if($insert_stmt = $conn->prepare($insert_query)) {
-                $insert_stmt->bind_param("iii", $user_id, $food_item_id, $quantity);
-                $insert_stmt->execute();
-                $_SESSION['success'] = "Item added to cart!";
-            }
+            $_SESSION['error'] = "Database error: " . $conn->error;
         }
+    } else {
+        $_SESSION['error'] = "Invalid quantity!";
     }
     
     header("Location: menu.php?category=" . $selected_category);
@@ -116,6 +134,16 @@ if(isset($_POST['add_to_cart'])) {
                 <?php 
                     echo $_SESSION['success']; 
                     unset($_SESSION['success']);
+                ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Error Message -->
+        <?php if(isset($_SESSION['error'])): ?>
+            <div class="error-message show">
+                <?php 
+                    echo $_SESSION['error']; 
+                    unset($_SESSION['error']);
                 ?>
             </div>
         <?php endif; ?>
@@ -218,6 +246,17 @@ if(isset($_POST['add_to_cart'])) {
                 successMsg.style.opacity = '0';
                 setTimeout(() => {
                     successMsg.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Auto-hide error message
+        const errorMsg = document.querySelector('.error-message');
+        if(errorMsg) {
+            setTimeout(() => {
+                errorMsg.style.opacity = '0';
+                setTimeout(() => {
+                    errorMsg.remove();
                 }, 300);
             }, 3000);
         }
