@@ -75,7 +75,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['food_image'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Food Image - Admin</title>
-    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../assets/css/upload_food_image.css">
     <style>
         .upload-container {
             max-width: 600px;

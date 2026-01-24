@@ -45,7 +45,7 @@ if($filter_status !== 'all') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order History - Mups Cafe Admin</title>
-    <link rel="stylesheet" href="../assets/css/admin_dashboard.css">
+    <link rel="stylesheet" href="../assets/css/order_history.css">
     <style>
         .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .filter-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
@@ -91,7 +91,14 @@ if($filter_status !== 'all') {
     <!-- Main Content -->
     <div class="main-content">
         <div class="top-bar">
-            <h1>Order History</h1>
+            <div class="top-bar-left">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+                <h1>Order History</h1>
+            </div>
             <div class="admin-profile">
                 <span>Welcome, <strong><?php echo htmlspecialchars($admin_name); ?></strong></span>
             </div>
@@ -122,44 +129,73 @@ if($filter_status !== 'all') {
             </div>
 
             <table class="table">
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Table</th>
-                        <th>Items</th>
-                        <th>Total Items</th>
-                        <th>Total Amount</th>
-                        <th>Status</th>
-                        <th>Order Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if($orders && $orders->num_rows > 0): ?>
-                        <?php while($order = $orders->fetch_assoc()): ?>
-                            <tr>
-                                <td><?php echo $order['orders_id']; ?></td>
-                                <td><?php echo htmlspecialchars($order['username'] ?? 'N/A'); ?></td>
-                                <td><?php echo htmlspecialchars($order['table_number']); ?></td>
-                                <td class="order-items" title="<?php echo htmlspecialchars($order['items']); ?>"><?php echo htmlspecialchars($order['items']); ?></td>
-                                <td><?php echo $order['total_items']; ?></td>
-                                <td>$<?php echo number_format($order['total_amount'], 2); ?></td>
-                                <td>
-                                    <span class="status-badge status-<?php echo $order['status']; ?>">
-                                        <?php echo ucfirst($order['status']); ?>
-                                    </span>
-                                </td>
-                                <td><?php echo date('M d, Y - h:i A', strtotime($order['order_time'])); ?></td>
-                            </tr>
-                        <?php endwhile; ?>
-                    <?php else: ?>
+                    <thead>
                         <tr>
-                            <td colspan="8">No orders found.</td>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Table</th>
+                            <th>Items</th>
+                            <th>Total Items</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th>Order Time</th>
                         </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php if($orders && $orders->num_rows > 0): ?>
+                            <?php while($order = $orders->fetch_assoc()): ?>
+                                <tr>
+                                    <td><?php echo $order['orders_id']; ?></td>
+                                    <td><?php echo htmlspecialchars($order['username'] ?? 'N/A'); ?></td>
+                                    <td><?php echo htmlspecialchars($order['table_number']); ?></td>
+                                    <td class="order-items" title="<?php echo htmlspecialchars($order['items']); ?>"><?php echo htmlspecialchars($order['items']); ?></td>
+                                    <td><?php echo $order['total_items']; ?></td>
+                                    <td>$<?php echo number_format($order['total_amount'], 2); ?></td>
+                                    <td>
+                                        <span class="status-badge status-<?php echo $order['status']; ?>">
+                                            <?php echo ucfirst($order['status']); ?>
+                                        </span>
+                                    </td>
+                                    <td><?php echo date('M d, Y - h:i A', strtotime($order['order_time'])); ?></td>
+                                </tr>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="8">No orders found.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
         </div>
     </div>
+
+    <script>
+        // Sidebar toggle functionality
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.admin-sidebar');
+        const backdrop = document.createElement('div');
+        backdrop.className = 'sidebar-backdrop';
+        document.body.appendChild(backdrop);
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('sidebar-open');
+            backdrop.classList.toggle('show');
+            sidebarToggle.classList.toggle('active');
+        }
+
+        sidebarToggle.addEventListener('click', toggleSidebar);
+
+        // Close sidebar when clicking backdrop
+        backdrop.addEventListener('click', toggleSidebar);
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 1024 && !sidebar.contains(event.target) && !sidebarToggle.contains(event.target)) {
+                sidebar.classList.remove('sidebar-open');
+                backdrop.classList.remove('show');
+                sidebarToggle.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>

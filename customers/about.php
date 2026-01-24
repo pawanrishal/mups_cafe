@@ -40,7 +40,7 @@
                     </p>
                 </div>
                 <div class="story-image">
-                    <img src="../uploads/cappuccino.jpg" alt="" class="image-placeholder">
+                    <img src="../uploads/image/cappuccino.jpg" alt="" class="image-placeholder">
                     
                 </div>
             </div>

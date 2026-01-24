@@ -32,6 +32,7 @@ body {
 
 .cart-container {
   max-width: 1200px;
+  margin: 11%;
   padding: 40px 20px;
 }
 
@@ -456,5 +457,9 @@ body {
 
   .empty-cart h2 {
     font-size: 24px;
+  }
+
+  .cart-container {
+    margin: 0px;
   }
 }

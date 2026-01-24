@@ -95,9 +95,9 @@ $recent_orders = $conn->query($recent_orders_query);
                 <!-- <span class="nav-icon">🍽️</span> -->
                 <span>Menu Items</span>
             </a>
-            <a href="customers.php" class="nav-item">
+            <a href="order_history.php" class="nav-item">
                 <!-- <span class="nav-icon">👥</span> -->
-                <span>Customers</span>
+                <span>Order History</span>
             </a>
             <a href="../auth/logout.php" class="nav-item logout">
                 <!-- <span class="nav-icon">🚪</span> -->
@@ -110,7 +110,14 @@ $recent_orders = $conn->query($recent_orders_query);
     <div class="main-content">
         <!-- Top Bar -->
         <div class="top-bar">
-            <h1>Dashboard Overview</h1>
+            <div class="top-bar-left">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+                <h1>Dashboard Overview</h1>
+            </div>
             <div class="admin-profile">
                 <span>Welcome, <strong><?php echo htmlspecialchars($admin_name); ?></strong></span>
             </div>
@@ -256,5 +263,34 @@ $recent_orders = $conn->query($recent_orders_query);
             </div>
         </div>
     </div>
+
+    <script>
+        // Sidebar toggle functionality
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.admin-sidebar');
+        const backdrop = document.createElement('div');
+        backdrop.className = 'sidebar-backdrop';
+        document.body.appendChild(backdrop);
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('sidebar-open');
+            backdrop.classList.toggle('show');
+            sidebarToggle.classList.toggle('active');
+        }
+
+        sidebarToggle.addEventListener('click', toggleSidebar);
+
+        // Close sidebar when clicking backdrop
+        backdrop.addEventListener('click', toggleSidebar);
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 1024 && !sidebar.contains(event.target) && !sidebarToggle.contains(event.target)) {
+                sidebar.classList.remove('sidebar-open');
+                backdrop.classList.remove('show');
+                sidebarToggle.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
