@@ -23,7 +23,7 @@
         <li><a href="contact.php" class="nav-link">Contact</a></li>
         <div class="mobile-actions">
           <a href="../customers/menu.php" class="btn-primary">Order Now</a>
-         <button class="btn-logout">Logout</button></a>
+          <a href="../auth/logout.php" onclick="return confirm('ARE YOU SURE?');"><button class="btn-logout">Logout</button></a>
         </div>
       </ul>
 

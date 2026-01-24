@@ -7,3 +7,7 @@ if($conn){
     echo "Database connection failed!";
 }
 ?>
+
+<?php
+header("Location: auth/register.php"); // change this if your register filename is different
+exit();
