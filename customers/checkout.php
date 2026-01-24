@@ -143,7 +143,7 @@ if(isset($_POST['place_order'])) {
                     if(!$item_stmt->execute()) throw new Exception("Failed to insert item: " . $item_stmt->error);
                 }
             } else {
-                $item_query = "INSERT INTO order_items (order_id, $food_col, quantity) VALUES (?, ?, ?)";
+                $item_query = "INSERT INTO orders_items (order_id, $food_col, quantity) VALUES (?, ?, ?)";
                 $item_stmt = $conn->prepare($item_query);
                 if(!$item_stmt) throw new Exception("Failed to prepare items: " . $conn->error);
                 
@@ -183,6 +183,148 @@ if(isset($_POST['place_order'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - Mups Cafe</title>
     <link rel="stylesheet" href="../assets/css/checkout.css">
+    <style>
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .modal-close:hover {
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .order-confirmation .confirmation-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .order-confirmation h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .order-details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .order-details p {
+            margin: 8px 0;
+            color: #555;
+        }
+
+        .confirmation-note {
+            color: #666;
+            font-size: 14px;
+            font-style: italic;
+            margin-top: 15px;
+        }
+
+        .modal-footer {
+            padding: 20px 30px 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-cancel, .btn-confirm {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-confirm {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background: linear-gradient(135deg, #218838 0%, #1aa085 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-confirm:active {
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
     <?php include '../Partials/nav.php'; ?>
@@ -234,7 +376,7 @@ if(isset($_POST['place_order'])) {
                         <span class="char-count">0 / 500 characters</span>
                     </div>
 
-                    <button type="submit" name="place_order" class="place-order-btn">
+                    <button type="submit" name="place_order" class="place-order-btn" >
                         Place Order - $<?php echo number_format($total_amount * 1.05, 2); ?>
                     </button>
                 </form>
@@ -322,5 +464,32 @@ if(isset($_POST['place_order'])) {
             return confirm('Confirm order placement?');
         });
     </script>
+
+    <!-- Custom Confirmation Modal -->
+    <div id="orderConfirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirm Your Order</h2>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="order-confirmation">
+                    <div class="confirmation-icon">🍽️</div>
+                    <h3>Ready to place your order?</h3>
+                    <div class="order-details">
+                        <p><strong>Total Amount:</strong> $<?php echo number_format($total_amount * 1.05, 2); ?></p>
+                        <p><strong>Items:</strong> <?php echo count($cart_items); ?> item(s)</p>
+                        <p><strong>Table:</strong> <span id="selectedTable">Not selected</span></p>
+                    </div>
+                    <p class="confirmation-note">Once confirmed, your order will be sent to the kitchen and cannot be modified.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" id="cancelOrder">Cancel</button>
+                <button type="button" class="btn-confirm" id="confirmOrder">Place Order</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

@@ -18,7 +18,7 @@ $query = "SELECT o.orders_id, o.table_number, o.status, o.order_time, o.total_am
           GROUP_CONCAT(CONCAT(fi.food_name, ' (', oi.quantity, ')') SEPARATOR ', ') as items,
           SUM(oi.quantity) as total_items
           FROM orders o
-          LEFT JOIN order_items oi ON o.orders_id = oi.order_id
+          LEFT JOIN orders_items oi ON o.orders_id = oi.order_id
           LEFT JOIN food_items fi ON oi.food_id = fi.food_items_id
           WHERE o.user_id = ?";
 
@@ -68,11 +68,11 @@ if($filter_status !== 'all') {
             <a href="order_history.php?status=pending" class="filter-tab <?php echo $filter_status === 'pending' ? 'active' : ''; ?>">
                 ⏳ Pending
             </a>
-            <a href="order_history.php?status=processing" class="filter-tab <?php echo $filter_status === 'processing' ? 'active' : ''; ?>">
-                👨‍🍳 Processing
+            <a href="order_history.php?status=preparing" class="filter-tab <?php echo $filter_status === 'preparing' ? 'active' : ''; ?>">
+                👨‍🍳 Preparing
             </a>
-            <a href="order_history.php?status=completed" class="filter-tab <?php echo $filter_status === 'completed' ? 'active' : ''; ?>">
-                ✅ Completed
+            <a href="order_history.php?status=served" class="filter-tab <?php echo $filter_status === 'served' ? 'active' : ''; ?>">
+                ✅ Served
             </a>
             <a href="order_history.php?status=cancelled" class="filter-tab <?php echo $filter_status === 'cancelled' ? 'active' : ''; ?>">
                 ❌ Cancelled
@@ -96,8 +96,8 @@ if($filter_status !== 'all') {
                                     <?php 
                                     $status_icons = [
                                         'pending' => '⏳',
-                                        'processing' => '👨‍🍳',
-                                        'completed' => '✅',
+                                        'preparing' => '👨‍🍳',
+                                        'served' => '✅',
                                         'cancelled' => '❌'
                                     ];
                                     echo $status_icons[$order['status']] ?? '';
@@ -134,10 +134,10 @@ if($filter_status !== 'all') {
                         <div class="order-footer">
                             <?php if($order['status'] === 'pending'): ?>
                                 <span class="status-message">⏰ Your order is being prepared...</span>
-                            <?php elseif($order['status'] === 'processing'): ?>
+                            <?php elseif($order['status'] === 'preparing'): ?>
                                 <span class="status-message">🔥 Your order is being cooked!</span>
-                            <?php elseif($order['status'] === 'completed'): ?>
-                                <span class="status-message">🎉 Order completed! Enjoy your meal!</span>
+                            <?php elseif($order['status'] === 'served'): ?>
+                                <span class="status-message">🎉 Order served! Enjoy your meal!</span>
                             <?php elseif($order['status'] === 'cancelled'): ?>
                                 <span class="status-message">This order was cancelled</span>
                             <?php endif; ?>

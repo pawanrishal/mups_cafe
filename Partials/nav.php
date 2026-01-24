@@ -10,17 +10,17 @@
 <body>
   <nav>
     <div class="nav-container">
-      <a href="../customers/customer_dashboard.php" class="logo">
+      <a href="../customers/customer_dashboard.php" class="logo" id="logoLink">
         <div class="logo-icon">☕</div>
-        <span class="logo-text">Mups Cafe</span>
+        <span class="logo-text">MUPS Cafe</span>
       </a>
 
       <ul class="nav-links" id="navLinks">
         <li><a href="../customers/customer_dashboard.php" class="nav-link active" id="home">Home</a></li>
-        <li><a href="menu.php" class="nav-link" id="menu">Menu</a></li>
-        <li><a href="#about" class="nav-link">About Us</a></li>
+        <li><a href="../customers/menu.php" class="nav-link" id="menu">Menu</a></li>
+        <li><a href="../customers/about.php" class="nav-link">About Us</a></li>
         <li><a href="../customers/cart.php" class="nav-link" id="cart">Cart</a></li>
-        <li><a href="#contact" class="nav-link">Contact</a></li>
+        <li><a href="contact.php" class="nav-link">Contact</a></li>
         <div class="mobile-actions">
           <a href="../customers/menu.php" class="btn-primary">Order Now</a>
          <button class="btn-logout">Logout</button></a>
@@ -79,6 +79,15 @@
         sessionStorage.setItem('activeLink', this.id || this.getAttribute('href'));
       });
     });
+
+    // Logo click functionality - set home as active
+    const logoLink = document.getElementById('logoLink');
+    if (logoLink) {
+      logoLink.addEventListener('click', function() {
+        // Set home as the active link
+        sessionStorage.setItem('activeLink', 'home');
+      });
+    }
 
     // Restore active link on page load
     window.addEventListener('DOMContentLoaded', () => {

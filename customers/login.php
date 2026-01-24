@@ -12,7 +12,11 @@ if(isset($_GET['success'])){
 }
 
 if(isset($_SESSION["user_id"]) && !isset($_GET['force'])){
-    header("Location: customer_dashboard.php");
+    if($_SESSION["role"] === 'admin'){
+        header("Location: ../admin/admin_dashboard.php");
+    } else {
+        header("Location: customer_dashboard.php");
+    }
     exit();
 }
 
@@ -111,6 +115,8 @@ if(isset($_COOKIE['username'])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MUPS CAFE | Customer Login</title>
     <link rel="stylesheet" href="../assets/css/login.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
 </head>
 <body>
     <div class="container">
@@ -154,7 +160,7 @@ if(isset($_COOKIE['username'])){
                             required
                         >
                         <button type="button" class="toggle-password" onclick="togglePassword('password')">
-                            <span class="eye-icon">👁️</span>
+                            <span class="eye-icon"><i class="bi bi-eye"></i></span>
                         </button>
                     </div>
                 </div>
@@ -188,10 +194,10 @@ if(isset($_COOKIE['username'])){
             
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
-                eyeIcon.textContent = '👁️‍🗨️';
+                eyeIcon.innerHTML = '<i class="bi bi-eye-slash"></i>';
             } else {
                 passwordField.type = 'password';
-                eyeIcon.textContent = '👁️';
+                eyeIcon.innerHTML = '<i class="bi bi-eye"></i>';
             }
         }
     </script>

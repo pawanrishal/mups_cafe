@@ -26,13 +26,13 @@ if($stmt = $conn->prepare($cart_count_query)) {
 // Get selected category (default: all)
 $selected_category = isset($_GET['category']) ? $_GET['category'] : 'all';
 
-// CORRECTED QUERY - using YOUR exact column names
+// Get all food items with category names and images
 $query = "SELECT fi.food_items_id, fi.category_id, fi.food_name, fi.description, fi.price, fi.image, c.name as category_name 
           FROM food_items fi 
           LEFT JOIN categories c ON fi.category_id = c.categories_id";
 
 if($selected_category !== 'all') {
-    $query .= " WHERE c.name = ?";
+    $query .= " WHERE LOWER(c.name) = LOWER(?)";
 }
 $query .= " ORDER BY c.name, fi.food_name";
 
@@ -120,7 +120,7 @@ if(isset($_POST['add_to_cart'])) {
                 <h1>Our Menu</h1>
                 <p>Delicious food crafted with love and passion</p>
             </div>
-            <a href="cart.php" class="cart-button" onclick="sessionStorage.setItem('activeLink','cart')">
+            <a href="cart.php" class="cart-button">
                 🛒 Cart 
                 <?php if($cart_count > 0): ?>
                     <span class="cart-badge"><?php echo $cart_count; ?></span>
@@ -154,19 +154,19 @@ if(isset($_POST['add_to_cart'])) {
                 All Items
             </a>
             <a href="menu.php?category=breakfast" class="category-btn <?php echo $selected_category === 'breakfast' ? 'active' : ''; ?>">
-                🍳 Breakfast
+                Breakfast
             </a>
             <a href="menu.php?category=lunch" class="category-btn <?php echo $selected_category === 'lunch' ? 'active' : ''; ?>">
-                🍔 Lunch
+                Lunch
             </a>
             <a href="menu.php?category=dinner" class="category-btn <?php echo $selected_category === 'dinner' ? 'active' : ''; ?>">
-                🍝 Dinner
+                Dinner
             </a>
             <a href="menu.php?category=snacks" class="category-btn <?php echo $selected_category === 'snacks' ? 'active' : ''; ?>">
-                🍟 Snacks
+                Snacks
             </a>
             <a href="menu.php?category=beverage" class="category-btn <?php echo $selected_category === 'beverage' ? 'active' : ''; ?>">
-                ☕ Beverages
+                Beverages
             </a>
         </div>
 
@@ -176,17 +176,23 @@ if(isset($_POST['add_to_cart'])) {
                 <?php while($item = $food_items->fetch_assoc()): ?>
                     <div class="menu-item">
                         <div class="item-image">
-                            <?php
-                            // Display emoji based on category
-                            $emojis = [
-                                'breakfast' => '🍳',
-                                'lunch' => '🍔',
-                                'dinner' => '🍝',
-                                'snacks' => '🍟',
-                                'beverage' => '☕'
-                            ];
-                            echo $emojis[$item['category_name']] ?? '🍽️';
-                            ?>
+                            <?php if(!empty($item['image']) && file_exists('../uploads/image/' . $item['image'])): ?>
+                                <img style="height: 240px; width: 370px;" src="../uploads/image/<?php echo htmlspecialchars($item['image']); ?>" alt="<?php echo htmlspecialchars($item['food_name']); ?>">
+                            <?php else: ?>
+                                <div class="placeholder-image">
+                                    <?php
+                                    // Display emoji based on category
+                                    $emojis = [
+                                        'breakfast' => '🍳',
+                                        'lunch' => '🍔',
+                                        'dinner' => '🍝',
+                                        'snacks' => '🍟',
+                                        'beverage' => '☕'
+                                    ];
+                                    echo $emojis[$item['category_name']] ?? '🍽️';
+                                    ?>
+                                </div>
+                            <?php endif; ?>
                             <span class="category-badge"><?php echo ucfirst($item['category_name']); ?></span>
                         </div>
                         

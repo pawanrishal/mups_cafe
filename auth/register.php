@@ -96,6 +96,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MUPS CAFE | Registration</title>
     <link rel="stylesheet" href="../assets/css/register.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
 </head>
 <body>
     <div class="auth-wrapper">
@@ -170,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             required
                         >
                         <button type="button" class="toggle-password" onclick="togglePassword('password')">
-                            <span class="eye-icon">👁️</span>
+                            <span class="eye-icon"><i class="bi bi-eye"></i></span>
                         </button>
                     </div>
                 </div>
@@ -187,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             required
                         >
                         <button type="button" class="toggle-password" onclick="togglePassword('confirmpassword')">
-                            <span class="eye-icon">👁️</span>
+                            <span class="eye-icon"><i class="bi bi-eye"></i></span>
                         </button>
                     </div>
                 </div>
@@ -215,10 +217,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
-                eyeIcon.textContent = '👁️‍🗨️';
+                eyeIcon.innerHTML = '<i class="bi bi-eye-slash"></i>';
             } else {
                 passwordField.type = 'password';
-                eyeIcon.textContent = '👁️';
+                eyeIcon.innerHTML = '<i class="bi bi-eye"></i>';
             }
         }
 
