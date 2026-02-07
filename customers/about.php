@@ -94,9 +94,8 @@
 
             <div class="team-grid">
                 <div class="team-member">
-                    <!-- <div class="member-image"></div> -->
                     <img src="../uploads/image/head_chef.jpg" alt="" class="member-image">   
-                    <h3>Pawan Rishal</h3>
+                    <h3>John Smith</h3>
                     <p class="member-role">Head Chef</p>
                     <p class="member-bio">With 15 years of culinary experience, John brings creativity and passion to every dish.</p>
                 </div>
@@ -116,7 +115,7 @@
                 </div>
 
                 <div class="team-member">
-                    <img src="../uploads/image/chef.jpg" alt="" class="member-image">
+                    <img src="../uploads/image/emily.jpg" alt="" class="member-image">
                     <h3>Emily Davis</h3>
                     <p class="member-role">Pastry Chef</p>
                     <p class="member-bio">Emily creates our delicious pastries and desserts fresh every morning.</p>

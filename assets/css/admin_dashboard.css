@@ -136,7 +136,7 @@ body {
 }
 
 .sidebar-toggle {
-  display: none;
+  display: none !important;
   background: none;
   border: none;
   cursor: pointer;
@@ -455,10 +455,6 @@ body {
   .main-content {
     margin-left: 0;
   }
-
-  .sidebar-toggle {
-    display: block;
-  }
 }
 
 @media (max-width: 768px) {
@@ -473,7 +469,7 @@ body {
   }
 
   .sidebar-toggle {
-    display: block;
+    display: block !important;
   }
 
   .top-bar-left h1 {

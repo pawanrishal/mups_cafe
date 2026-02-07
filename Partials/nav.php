@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mups Cafe - Navbar</title>
-    <link rel="stylesheet" href="../assets/css/nav.css">
+<link rel="stylesheet" href="../assets/css/nav.css">
 
-</head>
-<body>
   <nav>
     <div class="nav-container">
       <a href="../customers/customer_dashboard.php" class="logo" id="logoLink">
@@ -118,5 +110,3 @@
     //   navLinks.classList.remove('active');
     // });
   </script>
-</body>
-</html>

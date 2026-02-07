@@ -136,7 +136,7 @@ body {
 }
 
 .sidebar-toggle {
-  display: block;
+  display: none !important;
   background: none;
   border: none;
   cursor: pointer;
@@ -381,7 +381,7 @@ body {
   }
 
   .sidebar-toggle {
-    display: block;
+    display: none !important;
   }
 }
 
@@ -397,7 +397,7 @@ body {
   }
 
   .sidebar-toggle {
-    display: block;
+    display: block !important;
   }
 
   .top-bar-left h1 {
