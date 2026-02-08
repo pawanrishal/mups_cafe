@@ -15,7 +15,7 @@ if(isset($_SESSION["user_id"]) && !isset($_GET['force'])){
     if($_SESSION["role"] === 'admin'){
         header("Location: ../admin/admin_dashboard.php");
     } else {
-        header("Location: customer_dashboard.php");
+        header("Location: ../customers/customer_dashboard.php");
     }
     exit();
 }
